@@ -1,0 +1,13 @@
+#root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.submitButton {
+    background-color: cadetblue;
+    color: #f9f9f9;
+    padding: 10px 100px;
+    margin: 20px 0px;
+}

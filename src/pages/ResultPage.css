@@ -1,0 +1,25 @@
+
+.returnButton {
+    background-color: cadetblue;
+    color: #f9f9f9;
+    margin: 50px;
+    padding: 10px 100px;
+}
+
+.red {
+    background-color: darkred;
+    color: #ffffff;
+    margin-top: 20px;
+}
+
+.yellow {
+    background-color: khaki;
+    color: #ffffff;
+    margin-top: 20px;
+}
+
+.green {
+    background-color: mediumseagreen;
+    color: #ffffff;
+    margin-top: 20px;
+}
