@@ -2,7 +2,7 @@ import './QuestionCard.css'
 
 export default function QuestionCard({
                                          question,
-                                         answerQuestion = () => {
+                                         onClickAnswer = () => {
                                          },
                                          isResult = false
                                      }) {
@@ -21,18 +21,23 @@ export default function QuestionCard({
         } else {
             return answer === question.userAnswer ? "selectedBtn" : "unselectedBtn";
         }
+    }
 
+    function decodeHtmlEntities(str) {
+        const txt = document.createElement("textarea");
+        txt.innerHTML = str;
+        return txt.value;
     }
 
     return (
         <div className="card">
-            <p>{question.question}</p>
+            <p>{decodeHtmlEntities(question.question)}</p>
             {question.possibleAnswers.map(answer =>
                 <button key={answer}
                         id={answer}
-                        onClick={() => answerQuestion(question.question, answer)}
+                        onClick={() => onClickAnswer(question.question, answer)}
                         className={getClassName(answer)}>
-                    {answer}
+                    {decodeHtmlEntities(answer)}
                 </button>
             )}
         </div>

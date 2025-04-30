@@ -20,7 +20,7 @@ export default function CreateOptionsForm({onSubmit, listCategoryOption}) {
                 <option key="Medium" value="medium">Medium</option>
                 <option key="Hard" value="hard">Hard</option>
             </select>
-            <button key="btn-submit" id="createBtn"
+            <button key="createBtn" id="createBtn"
                     onClick={() => onSubmit(selectedCategory, selectedDifficulty)}>Create
             </button>
         </div>

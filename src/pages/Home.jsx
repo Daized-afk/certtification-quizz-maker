@@ -1,64 +1,55 @@
-import {useEffect, useMemo, useState} from 'react'
 import './Home.css'
-import axios from "axios";
 import CreateOptionsForm from "../components/CreateOptionsForm.jsx";
 import QuestionList from "../components/QuestionList.jsx";
-import {buildQuestionsFromList} from "../services/questionService.js";
+import {answerQuestion, buildQuestionsFromList, getListQuestionsRequest} from "../services/questionService.js";
 import {Link} from "react-router-dom";
+import {useGetCategoriesOptions} from "../services/categoryService.jsx";
+import {useState} from "react";
 
 
 export default function Home() {
-    const [listCategories, setListCategories] = useState([])
-    // build a list of select option each time listCategories is retrieved from server
-    const listCategoryOption = useMemo(() => {
-        if (listCategories) {
-            return listCategories.map(category => <option key={category.id}
-                                                          value={category.id}>{category.name}</option>)
-        }
-    }, [listCategories])
+    // a list of select options for categories
+    const listCategoryOption = useGetCategoriesOptions();
+    // a list of questions with their possibleAnswers, correctAnswer and userAnswer
+    const [listQuestions, setListQuestions] = useState([]);
+    // whether all questions have been answered
+    const isAllQuestionsAnswered = listQuestions.length > 0 && listQuestions.every(q => q.userAnswer !== "");
 
-    const [listQuestions, setListQuestions] = useState([])
-
-    function answerQuestion(theQuestion, theAnswer) {
-        const newAnswers = listQuestions.map(q => {
-            return {
-                question: q.question,
-                possibleAnswers: q.possibleAnswers,
-                correctAnswer: q.correctAnswer,
-                userAnswer: theQuestion === q.question ? theAnswer : q.userAnswer
-            }
-        })
-        setListQuestions(newAnswers)
+    /**
+     * Modify the userAnswer for a specific question when answer is clicked
+     * @param theQuestion the question the answer belongs to
+     * @param theAnswer the answer clicked
+     */
+    function onClickAnswer(theQuestion, theAnswer) {
+        setListQuestions(answerQuestion(listQuestions, theQuestion, theAnswer));
     }
 
-    useEffect(() => {
-        axios.get('https://opentdb.com/api_category.php').then(response => {
-            if (response) {
-                setListCategories(response.data?.trivia_categories)
-            }
-        })
-    }, [])
-
+    /**
+     * Update listQuestions with new questions when user click the form creation button
+     * @param category selected category
+     * @param difficulty selected difficulty
+     */
     function onSubmitFormCreation(category, difficulty) {
-        if (category !== "" || difficulty !== "") {
-            axios.get(`https://opentdb.com/api.php?amount=5&category=${category}&difficulty=${difficulty}&type=multiple`).then(response => {
+        if (!!category && !!difficulty) {
+            getListQuestionsRequest(category, difficulty).then(response => {
                 if (response) {
-                    setListQuestions(buildQuestionsFromList(response.data?.results))
+                    setListQuestions(buildQuestionsFromList(response.data?.results));
                 }
             })
         }
     }
-
-    const allQuestionsAnswered = listQuestions.length > 0 && listQuestions.every(q => q.userAnswer !== "")
 
     return (
         <>
             <h1>QUIZZ MAKER</h1>
             <CreateOptionsForm onSubmit={onSubmitFormCreation}
                                listCategoryOption={listCategoryOption}/>
-            <QuestionList questionList={listQuestions} answerQuestion={answerQuestion} isResult={false}/>
-            {allQuestionsAnswered &&
-                <Link to={"/result"} state={{listQuestions: listQuestions}} className="submitButton">Submit</Link>}
+            <QuestionList questionList={listQuestions} onClickAnswer={onClickAnswer} isResult={false}/>
+            {isAllQuestionsAnswered &&
+                <div className="submitButton">
+                    <Link to={"/result"} state={{listQuestions: listQuestions}}>Submit</Link>
+                </div>
+            }
         </>
     )
 }

@@ -5,16 +5,6 @@ import Home from './pages/Home.jsx'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ResultPage from "./pages/ResultPage.jsx";
 
-// const router = createBrowserRouter(
-//     createRoutesFromElements(
-//         <BrowserRouter>
-//             <Routes>
-//                 <Route path="/" element={<Home/>}/>
-//                 <Route path="/about" element={<Link to="/">My Liiiiiiiiiink</Link>}/>
-//             </Routes>
-//         </BrowserRouter>
-//     ));
-
 
 const router = createBrowserRouter([
     {
