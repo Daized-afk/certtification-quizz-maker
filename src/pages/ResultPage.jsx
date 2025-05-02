@@ -1,12 +1,12 @@
 import './ResultPage.css'
-import {Link, useLocation} from "react-router-dom";
+import {Link} from "react-router-dom";
 import QuestionList from "../components/QuestionList.jsx";
+import {useQuestionsContext} from "../services/questionsContext.jsx";
 
 
 export default function ResultPage() {
     // retrieve the questions previously submitted with their answers
-    const location = useLocation();
-    const {listQuestions} = location.state || {};
+    const {listQuestions} = useQuestionsContext();
     // calculate the score
     const score = listQuestions.filter(q => q.userAnswer === q.correctAnswer).length;
 
@@ -29,7 +29,7 @@ export default function ResultPage() {
             <QuestionList questionList={listQuestions} isResult={true}/>
             <div className={getScoreClassName(score)}>You scored {score} out of {listQuestions.length}</div>
             <div className="returnButton">
-                <Link to={"/"}>Create a new quizz</Link>
+                <Link to={"/certtification-quizz-maker"}>Create a new quizz</Link>
             </div>
         </>
     )

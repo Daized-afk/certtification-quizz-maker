@@ -4,15 +4,15 @@ import './index.css'
 import Home from './pages/Home.jsx'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ResultPage from "./pages/ResultPage.jsx";
-
+import {QuestionsProvider} from "./services/questionsContext.jsx";
 
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: "/certtification-quizz-maker",
         element: <Home/>,
     },
     {
-        path: "/result",
+        path: "/certtification-quizz-maker/result",
         element: <ResultPage/>,
     },
     {
@@ -23,6 +23,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-        <RouterProvider router={router}/>
+        <QuestionsProvider>
+            <RouterProvider router={router}/>
+        </QuestionsProvider>
     </StrictMode>,
 )

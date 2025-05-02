@@ -4,16 +4,22 @@ import QuestionList from "../components/QuestionList.jsx";
 import {answerQuestion, buildQuestionsFromList, getListQuestionsRequest} from "../services/questionService.js";
 import {Link} from "react-router-dom";
 import {useGetCategoriesOptions} from "../services/categoryService.jsx";
-import {useState} from "react";
+import {useQuestionsContext} from "../services/questionsContext.jsx";
+import {useEffect} from "react";
 
 
 export default function Home() {
     // a list of select options for categories
     const listCategoryOption = useGetCategoriesOptions();
     // a list of questions with their possibleAnswers, correctAnswer and userAnswer
-    const [listQuestions, setListQuestions] = useState([]);
+    const {listQuestions, setListQuestions} = useQuestionsContext();
     // whether all questions have been answered
     const isAllQuestionsAnswered = listQuestions.length > 0 && listQuestions.every(q => q.userAnswer !== "");
+
+    // Reset the question list when this component is mounted
+    useEffect(() => {
+        setListQuestions([]);
+    }, [setListQuestions]);
 
     /**
      * Modify the userAnswer for a specific question when answer is clicked
@@ -47,7 +53,7 @@ export default function Home() {
             <QuestionList questionList={listQuestions} onClickAnswer={onClickAnswer} isResult={false}/>
             {isAllQuestionsAnswered &&
                 <div className="submitButton">
-                    <Link to={"/result"} state={{listQuestions: listQuestions}}>Submit</Link>
+                    <Link to={"/certtification-quizz-maker/result"} state={{listQuestions: listQuestions}}>Submit</Link>
                 </div>
             }
         </>

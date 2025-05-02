@@ -1,6 +1,9 @@
 import QuestionCard from "./QuestionCard.jsx";
 
-export default function QuestionList({questionList, onClickAnswer = {onClickAnswer}, isResult = false}) {
+export default function QuestionList({
+                                         questionList, onClickAnswer = () => {
+    }, isResult = false
+                                     }) {
 
     return (
         <>
